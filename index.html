@@ -1,0 +1,1751 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Wall Snack & Resto</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;700&family=Roboto:wght@300;400;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-orange: #FF6B00;
+            --secondary-orange: #FF4D00;
+            --accent-yellow: #FFB800;
+            --dark-black: #0A0A0A;
+            --charcoal: #121212;
+            --card-bg: #1E1E1E;
+            --white: #FFFFFF;
+            --light-gray: #A0A0A0;
+            --gray-text: #888888;
+            --transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Roboto', sans-serif;
+            line-height: 1.6;
+            color: var(--white);
+            background-color: transparent;
+            overflow-x: hidden;
+        }
+
+        /* Animated Background System */
+        .bg-animation-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            overflow: hidden;
+            background-color: #000;
+        }
+
+        .bg-slide {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            opacity: 0;
+            transition: opacity 2s ease-in-out;
+            will-change: opacity;
+            transform: translateZ(0);
+            filter: brightness(1.06) contrast(1.14) saturate(1.08);
+            z-index: 1;
+            /* High-quality image optimizations */
+            image-rendering: -webkit-optimize-contrast;
+            image-rendering: crisp-edges;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            backface-visibility: hidden;
+            perspective: 1000px;
+        }
+
+        .bg-slide.active {
+            opacity: 0.85;
+            z-index: 2;
+        }
+
+        .bg-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at center, rgba(10, 10, 10, 0.1) 0%, rgba(10, 10, 10, 0.55) 100%);
+            z-index: 3;
+            /* Optimized overlay for better image visibility */
+            mix-blend-mode: multiply;
+            opacity: 0.7;
+        }
+
+        h1, h2, h3, .logo-text {
+            font-family: 'Oswald', sans-serif;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        /* Navigation */
+        header {
+            background: rgba(10, 10, 10, 0.95);
+            height: 90px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 5%;
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 1000;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            text-decoration: none;
+            transition: var(--transition);
+        }
+
+        .logo img {
+            height: 70px;
+            width: auto;
+            object-fit: contain;
+            transition: var(--transition);
+            filter: drop-shadow(0 0 10px rgba(255, 107, 0, 0.2));
+        }
+
+        .logo:hover img {
+            transform: scale(1.05);
+        }
+
+        @media (max-width: 768px) {
+            header { height: 70px; }
+            .logo img { height: 50px; }
+        }
+
+        nav {
+            display: flex;
+            gap: 30px;
+        }
+
+        nav a {
+            text-decoration: none;
+            color: var(--white);
+            font-weight: 700;
+            font-size: 0.85rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            transition: var(--transition);
+            position: relative;
+            opacity: 0.8;
+        }
+
+        nav a::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--primary-orange);
+            transition: var(--transition);
+        }
+
+        nav a:hover::after {
+            width: 100%;
+        }
+
+        nav a:hover {
+            color: var(--primary-orange);
+            opacity: 1;
+        }
+
+        .header-btns {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .btn-order {
+            background: var(--primary-orange);
+            color: white;
+            padding: 12px 30px;
+            border-radius: 4px;
+            text-decoration: none;
+            font-weight: 900;
+            font-size: 0.85rem;
+            transition: var(--transition);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            border: none;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(255, 107, 0, 0.3);
+        }
+
+        .btn-order:hover {
+            background: var(--secondary-orange);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(255, 107, 0, 0.4);
+        }
+
+        /* Hero Section */
+        .hero {
+            height: 100vh;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            color: var(--white);
+            padding: 0 20px;
+            overflow: hidden;
+            background-color: transparent;
+        }
+
+        .hero-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle, rgba(0,0,0,0.2) 0%, rgba(0,0,0,0.6) 100%);
+            z-index: 3;
+            pointer-events: none;
+        }
+
+        .hero-content {
+            background: rgba(0, 0, 0, 0.4);
+            padding: 60px;
+            border-radius: 0;
+            border-left: 5px solid var(--primary-orange);
+            max-width: 1000px;
+            width: 90%;
+            z-index: 4;
+            position: relative;
+        }
+
+        .hero h1 {
+            font-size: clamp(3rem, 8vw, 6rem);
+            margin-bottom: 10px;
+            line-height: 0.9;
+            font-weight: 900;
+            text-shadow: 0 10px 30px rgba(0,0,0,0.8);
+        }
+
+        .hero .punchline {
+            font-size: clamp(1rem, 2vw, 1.5rem);
+            margin-bottom: 40px;
+            font-weight: 400;
+            color: var(--primary-orange);
+            text-transform: uppercase;
+            letter-spacing: 4px;
+            font-family: 'Oswald', sans-serif;
+        }
+
+        .hero-btns {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .btn-outline {
+            background: transparent;
+            color: white;
+            padding: 12px 30px;
+            border-radius: 4px;
+            text-decoration: none;
+            font-weight: 900;
+            font-size: 0.85rem;
+            transition: var(--transition);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            border: 2px solid white;
+        }
+
+        .btn-outline:hover {
+            background: white;
+            color: var(--dark-black);
+        }
+
+        /* Menu Nav */
+        .menu-nav {
+            background: rgba(18, 18, 18, 0.9);
+            padding: 20px 0;
+            position: sticky;
+            top: 150px;
+            z-index: 997;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .menu-search {
+            position: sticky;
+            top: 90px;
+            z-index: 998;
+            background: rgba(10, 10, 10, 0.95);
+            padding: 18px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .menu-search-bar {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 0 20px;
+            position: relative;
+        }
+
+        .menu-search-bar input {
+            width: 100%;
+            padding: 16px 18px 16px 50px;
+            background: #0f0f0f;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: var(--white);
+            font-size: 1rem;
+            outline: none;
+            transition: var(--transition);
+        }
+
+        .menu-search-bar input:focus {
+            border-color: var(--primary-orange);
+        }
+
+        .menu-search-bar i {
+            position: absolute;
+            left: 38px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--primary-orange);
+            font-size: 1.1rem;
+        }
+
+        .menu-nav-container {
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            padding: 0 5%;
+            overflow-x: auto;
+            scrollbar-width: none;
+        }
+
+        .menu-nav-container::-webkit-scrollbar { display: none; }
+
+        .menu-nav a {
+            text-decoration: none;
+            color: var(--white);
+            font-weight: 700;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            opacity: 0.5;
+            transition: var(--transition);
+            white-space: nowrap;
+        }
+
+        .menu-nav a.active, .menu-nav a:hover {
+            opacity: 1;
+            color: var(--primary-orange);
+        }
+
+        /* Sections */
+        section {
+            padding: 100px 0;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 60px;
+            padding: 0 20px;
+        }
+
+        .section-header h2 {
+            font-size: clamp(2.5rem, 5vw, 4rem);
+            color: var(--white);
+            position: relative;
+            display: inline-block;
+        }
+
+        .section-header h2::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 4px;
+            background: var(--primary-orange);
+        }
+
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 24px;
+        }
+
+        .info-card {
+            background: rgba(18, 18, 18, 0.85);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            padding: 28px;
+        }
+
+        .info-card h4 {
+            font-family: 'Oswald', sans-serif;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 10px;
+            color: var(--primary-orange);
+        }
+
+        /* Menu Styles */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .menu-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 30px;
+        }
+
+        .menu-card {
+            background: rgba(30, 30, 30, 0.85);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 40px;
+            transition: var(--transition);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .menu-card:hover {
+            transform: translateY(-10px);
+            border-color: var(--primary-orange);
+            background: rgba(30, 30, 30, 0.8);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+        }
+
+        .card-badge {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: var(--primary-orange);
+            color: white;
+            padding: 5px 12px;
+            font-size: 0.7rem;
+            font-weight: 900;
+            text-transform: uppercase;
+            border-radius: 2px;
+        }
+
+        .card-title {
+            font-family: 'Oswald', sans-serif;
+            font-size: 1.8rem;
+            margin-bottom: 10px;
+            color: var(--white);
+        }
+
+        .card-desc {
+            color: var(--light-gray);
+            font-size: 0.95rem;
+            margin-bottom: 25px;
+            font-weight: 300;
+        }
+
+        .card-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            padding-top: 20px;
+        }
+
+        .card-price {
+            font-weight: 900;
+            font-size: 1.2rem;
+            color: var(--primary-orange);
+        }
+
+        .qty-control {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 6px 10px;
+        }
+
+        .qty-btn {
+            width: 34px;
+            height: 34px;
+            background: #0f0f0f;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.1rem;
+            transition: var(--transition);
+            cursor: pointer;
+            outline: none;
+        }
+
+        .qty-btn:hover {
+            background: var(--primary-orange);
+            border-color: var(--primary-orange);
+        }
+
+        .qty-value {
+            min-width: 26px;
+            text-align: center;
+            font-weight: 900;
+            color: var(--white);
+        }
+
+        /* About Section */
+        .about-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 60px;
+            align-items: center;
+        }
+
+        .about-content h3 {
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+            color: var(--primary-orange);
+        }
+
+        .about-content p {
+            font-size: 1.1rem;
+            margin-bottom: 30px;
+            color: var(--light-gray);
+        }
+
+        .about-image {
+            position: relative;
+        }
+
+        .about-image img {
+            width: 100%;
+            height: auto;
+            border: 10px solid var(--charcoal);
+            box-shadow: 20px 20px 0 var(--primary-orange);
+        }
+
+        /* Instagram Gallery */
+        .instagram-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 15px;
+        }
+
+        .insta-item {
+            position: relative;
+            aspect-ratio: 1;
+            overflow: hidden;
+            cursor: pointer;
+        }
+
+        .insta-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: var(--transition);
+        }
+
+        .insta-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 107, 0, 0.8);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transition: var(--transition);
+        }
+
+        .insta-item:hover img { transform: scale(1.1); }
+        .insta-item:hover .insta-overlay { opacity: 1; }
+
+        /* Location */
+        .location-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            background: rgba(18, 18, 18, 0.8);
+            overflow: hidden;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .map-frame {
+            width: 100%;
+            height: 500px;
+            border: none;
+        }
+
+        .location-details {
+            padding: 60px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        /* Contact Form */
+        .contact-grid {
+            display: grid;
+            grid-template-columns: 1fr 1.5fr;
+            gap: 60px;
+        }
+
+        .contact-form {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .form-group input, .form-group textarea {
+            width: 100%;
+            padding: 15px;
+            background: var(--charcoal);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: white;
+            outline: none;
+            transition: var(--transition);
+        }
+
+        .form-group input:focus, .form-group textarea:focus {
+            border-color: var(--primary-orange);
+        }
+
+        /* Footer */
+        footer {
+            background: rgba(5, 5, 5, 0.9);
+            padding: 80px 0 30px;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .footer-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 40px;
+            margin-bottom: 60px;
+        }
+
+        .footer-logo img { height: 80px; margin-bottom: 20px; }
+
+        .social-links {
+            display: flex;
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .social-links a {
+            color: white;
+            font-size: 1.5rem;
+            transition: var(--transition);
+        }
+
+        .social-links a:hover { color: var(--primary-orange); }
+
+        /* Payment Section */
+        .payment-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 60px;
+            align-items: center;
+        }
+
+        .payment-card-container {
+            perspective: 1000px;
+            width: 100%;
+            max-width: 420px;
+            height: 260px;
+            margin: 0 auto;
+        }
+
+        .payment-card {
+            width: 100%;
+            height: 100%;
+            position: relative;
+            transition: transform 0.8s;
+            transform-style: preserve-3d;
+            cursor: pointer;
+        }
+
+        .payment-card:hover, .payment-card.flipped {
+            transform: rotateY(180deg);
+        }
+
+        .card-front, .card-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            border-radius: 15px;
+            padding: 30px;
+            color: white;
+            background: linear-gradient(to right bottom, #323941, #061018);
+            box-shadow: 0 33px 50px -15px rgba(50, 55, 63, .66);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            overflow: hidden;
+            transform-style: preserve-3d;
+        }
+
+        .card-back {
+            transform: rotateY(180deg);
+            background: linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 100%);
+        }
+
+        .card-chip {
+            width: 50px;
+            height: 40px;
+            background: linear-gradient(135deg, #ffd700 0%, #b8860b 100%);
+            border-radius: 5px;
+        }
+
+        .card-number-display {
+            font-size: 1.5rem;
+            letter-spacing: 2px;
+            margin: 20px 0;
+            font-family: 'Courier New', Courier, monospace;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+        }
+
+        .card-info-row {
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .card-label {
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            opacity: 0.6;
+            margin-bottom: 5px;
+        }
+
+        .card-value {
+            font-size: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .card-strip {
+            width: calc(100% + 60px);
+            height: 50px;
+            background: #000;
+            margin-left: -30px;
+            margin-top: 10px;
+        }
+
+        .card-cvv-display {
+            background: #fff;
+            color: #000;
+            padding: 10px;
+            text-align: right;
+            border-radius: 5px;
+            margin-top: 20px;
+            font-family: 'Courier New', Courier, monospace;
+            font-weight: bold;
+            font-style: italic;
+        }
+
+        .payment-form-container {
+            background: rgba(30, 30, 30, 0.7);
+            padding: 40px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .payment-form .form-group {
+            margin-bottom: 20px;
+        }
+
+        .payment-form label {
+            display: block;
+            margin-bottom: 8px;
+            font-size: 0.8rem;
+            color: var(--gray-text);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        @media (max-width: 992px) {
+            .payment-grid {
+                grid-template-columns: 1fr;
+                gap: 40px;
+            }
+        }
+
+        /* Cart UI */
+        .cart-toggle {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 70px;
+            height: 70px;
+            background: var(--primary-orange);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.8rem;
+            cursor: pointer;
+            box-shadow: 0 10px 30px rgba(255, 107, 0, 0.4);
+            z-index: 2000;
+            transition: var(--transition);
+        }
+
+        .cart-toggle:hover {
+            transform: scale(1.1);
+            box-shadow: 0 15px 40px rgba(255, 107, 0, 0.6);
+        }
+
+        .cart-count {
+            position: absolute;
+            top: 0;
+            right: 0;
+            background: white;
+            color: var(--primary-orange);
+            width: 25px;
+            height: 25px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8rem;
+            font-weight: 900;
+            border: 2px solid var(--primary-orange);
+        }
+
+        .cart-sidebar {
+            position: fixed;
+            top: 0;
+            right: -450px;
+            width: 450px;
+            height: 100vh;
+            background: var(--charcoal);
+            z-index: 3000;
+            transition: 0.5s cubic-bezier(0.165, 0.84, 0.44, 1);
+            padding: 40px;
+            display: flex;
+            flex-direction: column;
+            box-shadow: -10px 0 50px rgba(0,0,0,0.5);
+        }
+
+        .cart-sidebar.active {
+            right: 0;
+        }
+
+        .cart-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 40px;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            padding-bottom: 20px;
+        }
+
+        .cart-header h2 {
+            font-family: 'Oswald', sans-serif;
+            font-size: 2rem;
+            color: var(--white);
+        }
+
+        .close-cart {
+            font-size: 2rem;
+            color: var(--white);
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .close-cart:hover {
+            color: var(--primary-orange);
+            transform: rotate(90deg);
+        }
+
+        .cart-items {
+            flex: 1;
+            overflow-y: auto;
+            margin-bottom: 30px;
+        }
+
+        .cart-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            background: rgba(255,255,255,0.03);
+            padding: 15px;
+            border-radius: 5px;
+        }
+
+        .cart-item-info h4 {
+            color: var(--white);
+            font-size: 1rem;
+            margin-bottom: 5px;
+        }
+
+        .cart-item-info p {
+            color: var(--primary-orange);
+            font-weight: 700;
+            font-size: 0.9rem;
+        }
+
+        .cart-item-remove {
+            color: #ff4444;
+            cursor: pointer;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            font-weight: 700;
+        }
+
+        .cart-footer-panel {
+            border-top: 1px solid rgba(255,255,255,0.1);
+            padding-top: 30px;
+        }
+
+        .cart-total-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+        }
+
+        .cart-total-row span:first-child {
+            color: var(--light-gray);
+            font-size: 1.1rem;
+        }
+
+        .cart-total-row span:last-child {
+            color: var(--white);
+            font-size: 1.8rem;
+            font-weight: 900;
+            font-family: 'Oswald', sans-serif;
+        }
+
+        @media (max-width: 576px) {
+            .cart-sidebar {
+                width: 100%;
+                right: -100%;
+                padding: 20px;
+            }
+        }
+
+        /* Animations */
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s cubic-bezier(0.165, 0.84, 0.44, 1);
+        }
+
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        @media (max-width: 992px) {
+            .about-grid, .location-container, .contact-grid {
+                grid-template-columns: 1fr;
+            }
+            .instagram-grid { grid-template-columns: repeat(2, 1fr); }
+            .hero-content { padding: 40px 20px; }
+        }
+
+        @media (max-width: 768px) {
+            header { height: 70px; }
+            .logo img { height: 50px; }
+            
+            nav {
+                position: fixed;
+                top: 0;
+                right: -100%;
+                width: 80%;
+                height: 100vh;
+                background: var(--dark-black);
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+                gap: 40px;
+                transition: 0.5s cubic-bezier(0.165, 0.84, 0.44, 1);
+                z-index: 1001;
+                box-shadow: -10px 0 30px rgba(0,0,0,0.5);
+            }
+
+            nav.active {
+                right: 0;
+            }
+
+            .mobile-menu-btn {
+                display: flex;
+                flex-direction: column;
+                gap: 6px;
+                background: transparent;
+                border: none;
+                cursor: pointer;
+                z-index: 1002;
+            }
+
+            .mobile-menu-btn span {
+                display: block;
+                width: 30px;
+                height: 3px;
+                background: var(--white);
+                transition: var(--transition);
+                border-radius: 2px;
+            }
+
+            .mobile-menu-btn.active span:nth-child(1) {
+                transform: translateY(9px) rotate(45deg);
+                background: var(--primary-orange);
+            }
+
+            .mobile-menu-btn.active span:nth-child(2) {
+                opacity: 0;
+            }
+
+            .mobile-menu-btn.active span:nth-child(3) {
+                transform: translateY(-9px) rotate(-45deg);
+                background: var(--primary-orange);
+            }
+            
+            .menu-grid { grid-template-columns: 1fr; }
+            .section-header h2 { font-size: 2.5rem; }
+            .hero-content { padding: 40px 20px; }
+            .bg-slide.active { opacity: 0.8; }
+            .bg-overlay { background: radial-gradient(circle at center, rgba(10, 10, 10, 0.12) 0%, rgba(10, 10, 10, 0.6) 100%); }
+        }
+
+        .mobile-menu-btn { display: none; }
+        @media (max-width: 768px) { .mobile-menu-btn { display: flex; } }
+
+    </style>
+</head>
+<body>
+
+<div class="bg-animation-container" id="bg-animation">
+    <!-- Local Video Background -->
+    <video autoplay muted loop playsinline style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; z-index: 1;">
+        <source src="backgoundvidio/Food Film _ Cinematic Burger.mp4" type="video/mp4">
+    </video>
+    <div class="bg-overlay"></div>
+</div>
+
+<header>
+    <a href="#home" class="logo">
+        <img src="images/logo.jpg" alt="The Wall Snack & Resto Logo">
+    </a>
+    <nav id="main-nav">
+        <a href="#home">Accueil</a>
+        <a href="#menu">Menu</a>
+        <a href="#gallery">Instagram</a>
+        <a href="#about">À propos</a>
+        <a href="#location">Localisation</a>
+        <a href="#contact">Contact</a>
+    </nav>
+    <div class="header-btns">
+        <a href="#menu" class="btn-order">Voir le menu</a>
+        <button class="mobile-menu-btn" id="mobile-menu-toggle">
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
+    </div>
+</header>
+
+<section class="hero" id="home">
+    <div class="hero-overlay"></div>
+    <div class="hero-content reveal">
+        <p class="punchline">Street Food Moderne</p>
+        <h1>THE WALL SNACK & RESTO</h1>
+        <p>Le spot urbain pour burgers, tacos, pizzas et bien plus. Rapide, généreux, et fait pour commander facilement.</p>
+        <div class="hero-btns">
+            <a href="#menu" class="btn-order">Voir le menu</a>
+            <a href="https://wa.me/213555219684" target="_blank" class="btn-outline">Commander WhatsApp</a>
+        </div>
+    </div>
+</section>
+
+<section id="home-info" class="reveal">
+    <div class="container">
+        <div class="info-grid">
+            <div class="info-card reveal">
+                <h4>Horaires</h4>
+                <p style="color: var(--light-gray);">Tous les jours : 12h00 – 00h00</p>
+            </div>
+            <div class="info-card reveal">
+                <h4>Localisation</h4>
+                <p style="color: var(--light-gray);">Dely Ibrahim, Alger</p>
+            </div>
+            <div class="info-card reveal">
+                <h4>Commander</h4>
+                <p style="color: var(--light-gray);">Téléphone : 0555 21 96 84</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section id="highlights" class="reveal">
+    <div class="container">
+        <div class="section-header">
+            <h2>Meilleures ventes</h2>
+            <p style="color: var(--light-gray); margin-top: 15px;">Les incontournables du moment.</p>
+        </div>
+        <div class="menu-grid">
+            <div class="menu-card reveal">
+                <div class="card-content">
+                    <p class="card-title">Smash</p>
+                    <p class="card-desc">Cornichons, 50gr viande hachée, fromage, sauce smash.</p>
+                    <div class="card-footer">
+                        <p class="card-price">350 DZD</p>
+                    </div>
+                </div>
+            </div>
+            <div class="menu-card reveal">
+                <div class="card-content">
+                    <p class="card-title">Croustyl</p>
+                    <p class="card-desc">Salade, tomate, 100gr poulet pané, fromage, sauce à l’ail.</p>
+                    <div class="card-footer">
+                        <p class="card-price">450 DZD</p>
+                    </div>
+                </div>
+            </div>
+            <div class="menu-card reveal">
+                <div class="card-content">
+                    <p class="card-title">Mixte</p>
+                    <p class="card-desc">Steak haché, poulet pané, double fromage, sauce à l’ail.</p>
+                    <div class="card-footer">
+                        <p class="card-price">700 DZD</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section id="menu">
+    <div class="menu-search">
+        <div class="menu-search-bar">
+            <i class="fas fa-search"></i>
+            <input type="text" id="menu-search" placeholder="Rechercher un plat, une boisson, une option..." autocomplete="off">
+        </div>
+    </div>
+    <div class="menu-nav">
+        <div class="menu-nav-container" id="menu-categories">
+            <!-- Categories will be injected here -->
+        </div>
+    </div>
+    <div class="container" id="menu-container">
+        <!-- Menu sections will be injected here -->
+    </div>
+</section>
+
+<!-- GALLERY SECTION -->
+<section id="gallery" class="reveal">
+    <div class="container">
+        <div class="section-header">
+            <h2>Instagram</h2>
+            <p style="color: var(--light-gray); margin-top: 15px;">L’ambiance The Wall en images.</p>
+        </div>
+        <div class="instagram-grid">
+            <div class="insta-item reveal">
+                <img src="images/Capture d'écran 2026-03-14 234103.png" alt="The Wall Snack & Resto">
+                <div class="insta-overlay"><i class="fab fa-instagram"></i></div>
+            </div>
+            <div class="insta-item reveal">
+                <img src="images/Capture d'écran 2026-03-14 234121.png" alt="The Wall Snack & Resto">
+                <div class="insta-overlay"><i class="fab fa-instagram"></i></div>
+            </div>
+            <div class="insta-item reveal">
+                <img src="images/Capture d'écran 2026-03-14 234153.png" alt="The Wall Snack & Resto">
+                <div class="insta-overlay"><i class="fab fa-instagram"></i></div>
+            </div>
+            <div class="insta-item reveal">
+                <img src="images/Capture d'écran 2026-03-14 234206.png" alt="The Wall Snack & Resto">
+                <div class="insta-overlay"><i class="fab fa-instagram"></i></div>
+            </div>
+            <div class="insta-item reveal">
+                <img src="images/Capture d'écran 2026-03-14 234216.png" alt="The Wall Snack & Resto">
+                <div class="insta-overlay"><i class="fab fa-instagram"></i></div>
+            </div>
+            <div class="insta-item reveal">
+                <img src="images/Capture d'écran 2026-03-14 234227.png" alt="The Wall Snack & Resto">
+                <div class="insta-overlay"><i class="fab fa-instagram"></i></div>
+            </div>
+            <div class="insta-item reveal">
+                <img src="images/Capture d'écran 2026-03-14 234257.png" alt="The Wall Snack & Resto">
+                <div class="insta-overlay"><i class="fab fa-instagram"></i></div>
+            </div>
+            <div class="insta-item reveal">
+                <img src="images/Capture d'écran 2026-03-14 234324.png" alt="The Wall Snack & Resto">
+                <div class="insta-overlay"><i class="fab fa-instagram"></i></div>
+            </div>
+        </div>
+        <div style="text-align: center; margin-top: 40px; display: flex; gap: 16px; justify-content: center; flex-wrap: wrap;">
+            <a href="https://www.facebook.com/thewallsnack/?ref=NONE_xav_ig_profile_page_web#" target="_blank" class="btn-outline">Voir Facebook</a>
+            <a href="https://www.instagram.com/thewallsnack?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw==" target="_blank" class="btn-outline">Voir Instagram</a>
+        </div>
+    </div>
+</section>
+
+<!-- ABOUT SECTION -->
+<section id="about" class="reveal">
+    <div class="container">
+        <div class="about-grid">
+            <div class="about-image reveal">
+                <img src="images/Capture d'écran 2026-03-14 234357.png" alt="The Wall Snack & Resto">
+            </div>
+            <div class="about-content reveal">
+                <div class="section-header" style="text-align: left; margin-bottom: 30px;">
+                    <h2 style="font-size: 3rem;">Notre histoire</h2>
+                </div>
+                <h3 style="color: var(--primary-orange); margin-bottom: 20px;">Gourmand, rapide, urbain</h3>
+                <p>The Wall Snack & Resto propose une cuisine street-food généreuse avec des recettes modernes, des ingrédients soignés et un service rapide.</p>
+                <p>Burgers, tacos, bowls, pizzas, grillades et accompagnements : tout est pensé pour une commande simple, claire et efficace.</p>
+                <a href="#menu" class="btn-order">Découvrir le menu</a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- LOCATION SECTION -->
+<section id="location" class="reveal">
+    <div class="container">
+        <div class="section-header">
+            <h2>Localisation</h2>
+        </div>
+        <div class="location-container reveal">
+            <!-- Embedding Google Maps using coordinates derived from the short link location -->
+            <iframe class="map-frame" src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d1598.6652233800645!2d2.9818844!3d36.741066!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x128faf9ddf4c82c3%3A0xebea291debe45ee2!2sThe%20Wall%20Snack%20%26%20Resto!5e0!3m2!1sen!2sdz!4v1710530400000!5m2!1sen!2sdz" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+            <div class="location-details">
+                <h3 style="color: var(--primary-orange); margin-bottom: 20px;">The Wall Snack & Resto</h3>
+                <p style="margin-bottom: 20px; color: var(--light-gray);">Retrouvez-nous à Dely Ibrahim, Alger. Service rapide et ambiance street-food.</p>
+                <div style="margin-bottom: 15px;">
+                    <p style="font-weight: bold; color: var(--white);">ADRESSE :</p>
+                    <p style="color: var(--light-gray);">Dely Ibrahim, Alger</p>
+                </div>
+                <div style="margin-bottom: 30px;">
+                    <p style="font-weight: bold; color: var(--white);">HORAIRES :</p>
+                    <p style="color: var(--light-gray);">Tous les jours : 12h00 – 00h00</p>
+                </div>
+                <a href="https://maps.app.goo.gl/r6MNWi8BKuX97Pmg9" target="_blank" class="btn-order" style="display: inline-block; text-align: center;">Itinéraire</a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- CONTACT SECTION -->
+<section id="contact" class="reveal">
+    <div class="container">
+        <div class="section-header">
+            <h2>Contact</h2>
+        </div>
+        <div class="contact-grid">
+            <div class="contact-info reveal">
+                <h3 style="color: var(--primary-orange); margin-bottom: 20px;">Nous contacter</h3>
+                <p style="color: var(--light-gray); margin-bottom: 30px;">Commandes rapides par téléphone ou WhatsApp. Réponse directe via Facebook et Instagram.</p>
+                
+                <div style="margin-bottom: 20px;">
+                    <p style="font-weight: bold; color: var(--white);">TÉLÉPHONE :</p>
+                    <a href="tel:0555219684" style="color: var(--primary-orange); font-size: 1.2rem; text-decoration: none;">0555 21 96 84</a>
+                </div>
+                
+                <div style="margin-bottom: 20px;">
+                    <p style="font-weight: bold; color: var(--white);">RÉSEAUX :</p>
+                    <div class="social-links" style="margin-top: 10px;">
+                        <a href="https://www.facebook.com/thewallsnack/?ref=NONE_xav_ig_profile_page_web#" target="_blank" style="color: var(--white); font-size: 1.5rem; margin-right: 20px;"><i class="fab fa-facebook"></i></a>
+                        <a href="https://www.instagram.com/thewallsnack?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw==" target="_blank" style="color: var(--white); font-size: 1.5rem; margin-right: 20px;"><i class="fab fa-instagram"></i></a>
+                        <a href="https://wa.me/213555219684" target="_blank" style="color: var(--white); font-size: 1.5rem;"><i class="fab fa-whatsapp"></i></a>
+                    </div>
+                </div>
+                <div style="margin-bottom: 20px;">
+                    <p style="font-weight: bold; color: var(--white);">ADRESSE :</p>
+                    <p style="color: var(--light-gray);">Dely Ibrahim, Alger</p>
+                </div>
+            </div>
+            
+            <form class="contact-form reveal">
+                <div class="form-group">
+                    <input type="text" placeholder="Votre nom" required>
+                </div>
+                <div class="form-group">
+                    <input type="email" placeholder="Votre email" required>
+                </div>
+                <div class="form-group">
+                    <textarea placeholder="Votre message" rows="5" required></textarea>
+                </div>
+                <button type="submit" class="btn-order">Envoyer</button>
+            </form>
+        </div>
+    </div>
+</section>
+
+<!-- CART UI -->
+<div class="cart-toggle" id="cart-toggle">
+    <i class="fas fa-shopping-bag"></i>
+    <div class="cart-count" id="cart-count">0</div>
+</div>
+
+<div class="cart-sidebar" id="cart-sidebar">
+    <div class="cart-header">
+        <h2>Votre commande</h2>
+        <div class="close-cart" id="close-cart">&times;</div>
+    </div>
+    <div class="cart-items" id="cart-items-container">
+        <!-- Cart items will be injected here -->
+        <p style="color: var(--gray-text); text-align: center; margin-top: 40px;">Votre panier est vide.</p>
+    </div>
+    <div class="cart-footer-panel">
+        <div class="cart-total-row">
+            <span>Total</span>
+            <span id="cart-total">0 DZD</span>
+        </div>
+        <div style="display: grid; gap: 12px;">
+            <a href="tel:0555219684" class="btn-order" style="width: 100%; text-align: center; display: block;">Commander par téléphone</a>
+            <a href="https://wa.me/213555219684" target="_blank" class="btn-outline" style="width: 100%; text-align: center; display: block;">Commander sur WhatsApp</a>
+        </div>
+    </div>
+</div>
+
+<footer>
+    <div class="container">
+        <div class="footer-grid">
+            <div class="footer-logo">
+                <img src="images/logo.jpg" alt="The Wall Snack & Resto Logo" style="height: 70px; margin-bottom: 20px;">
+                <p style="color: var(--gray-text);">The Wall Snack & Resto : street-food moderne, rapide et généreuse.</p>
+            </div>
+            <div>
+                <h4 style="color: var(--white); font-family: 'Oswald'; text-transform: uppercase; margin-bottom: 20px;">Liens</h4>
+                <ul style="list-style: none; padding: 0;">
+                    <li style="margin-bottom: 10px;"><a href="#home" style="color: var(--light-gray); text-decoration: none; transition: var(--transition);">Accueil</a></li>
+                    <li style="margin-bottom: 10px;"><a href="#menu" style="color: var(--light-gray); text-decoration: none; transition: var(--transition);">Menu</a></li>
+                    <li style="margin-bottom: 10px;"><a href="#location" style="color: var(--light-gray); text-decoration: none; transition: var(--transition);">Localisation</a></li>
+                    <li style="margin-bottom: 10px;"><a href="#contact" style="color: var(--light-gray); text-decoration: none; transition: var(--transition);">Contact</a></li>
+                </ul>
+            </div>
+            <div>
+                <h4 style="color: var(--white); font-family: 'Oswald'; text-transform: uppercase; margin-bottom: 20px;">Réseaux</h4>
+                <p style="color: var(--light-gray); margin-bottom: 20px;">Suivez nos actus et promos.</p>
+                <div class="social-links">
+                    <a href="https://www.facebook.com/thewallsnack/?ref=NONE_xav_ig_profile_page_web#" target="_blank" style="color: var(--white); font-size: 1.2rem; margin-right: 15px;"><i class="fab fa-facebook"></i> The Wall Snack</a>
+                    <a href="https://www.instagram.com/thewallsnack?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw==" target="_blank" style="color: var(--white); font-size: 1.2rem; margin-right: 15px;"><i class="fab fa-instagram"></i> @thewallsnack</a>
+                </div>
+            </div>
+        </div>
+        <div style="text-align: center; padding-top: 30px; border-top: 1px solid rgba(255,255,255,0.05); color: var(--gray-text); font-size: 0.8rem;">
+            &copy; 2026 The Wall Snack & Resto. Tous droits réservés.
+        </div>
+    </div>
+</footer>
+
+<script>
+    // Reveal Animations
+    const observerOptions = {
+        threshold: 0.1,
+        rootMargin: "0px 0px -50px 0px"
+    };
+
+    const revealObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('active');
+            }
+        });
+    }, observerOptions);
+
+    document.querySelectorAll('.reveal').forEach(el => {
+        revealObserver.observe(el);
+    });
+
+    // Mobile Menu Toggle
+    const mobileMenuBtn = document.getElementById('mobile-menu-toggle');
+    const mainNav = document.getElementById('main-nav');
+
+    mobileMenuBtn.addEventListener('click', () => {
+        mobileMenuBtn.classList.toggle('active');
+        mainNav.classList.toggle('active');
+        
+        if (mainNav.classList.contains('active')) {
+            document.body.style.overflow = 'hidden';
+        } else {
+            document.body.style.overflow = 'auto';
+        }
+    });
+
+    // Close mobile menu on link click
+    document.querySelectorAll('nav a').forEach(link => {
+        link.addEventListener('click', () => {
+            mobileMenuBtn.classList.remove('active');
+            mainNav.classList.remove('active');
+            document.body.style.overflow = 'auto';
+        });
+    });
+
+    // Smooth Scroll with Offset
+    function initSmoothScroll() {
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const targetId = this.getAttribute('href');
+                if (targetId === '#') return;
+                
+                const target = document.querySelector(targetId);
+                if (target) {
+                    const headerHeight = 150;
+                    const targetPosition = target.getBoundingClientRect().top + window.pageYOffset - headerHeight;
+                    
+                    window.scrollTo({
+                        top: targetPosition,
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
+    }
+
+    // --- MENU MANAGEMENT SYSTEM ---
+    const menuData = [
+        {
+            category: "burgers",
+            title: "Nos Burgers",
+            note: "Menu +300 DA : Burger + Frites + Boisson",
+            items: [
+                { id: "burger-smash", name: "Smash", price: 350, description: "Cornichons, 50gr viande hachée, fromage, sauce smash." },
+                { id: "burger-double-smash", name: "Double Smash", price: 600, description: "Cornichons, 50gr viande hachée x2, fromage x2, sauce smash." },
+                { id: "burger-triple-smash", name: "Triple Smash", price: 800, description: "Cornichons, 50gr viande hachée x3, fromage x3, sauce smash." },
+                { id: "burger-braise", name: "Le Braisé (New)", price: 400, description: "Salade, tomate, 100gr poulet grillé, fromage, sauce tartare." },
+                { id: "burger-croustyl", name: "Croustyl", price: 450, description: "Salade, tomate, 100gr poulet pané, fromage, sauce à l’ail." },
+                { id: "burger-classic", name: "Classic", price: 500, description: "Salade, tomate, 100gr viande hachée, fromage, sauce fromagère." },
+                { id: "burger-normand", name: "Normand", price: 500, description: "Salade, 100gr viande hachée, camembert, sauce fromagère." },
+                { id: "burger-radicale", name: "Radicale", price: 550, description: "Salade, tomate, 100gr viande hachée, œuf, fromage, sauce fromagère." },
+                { id: "burger-brooklyn", name: "Brooklyn", price: 550, description: "Salade, tomate, 100gr viande hachée, oignons caramélisés, fromage." },
+                { id: "burger-butcher", name: "Butcher (New)", price: 600, description: "Salade, tomate, 100gr viande hachée, galette de PDT, fromage, sauce tartare." },
+                { id: "burger-american", name: "American", price: 600, description: "100gr steak haché, 50gr chiche kebab, fromage, sauce BBQ." },
+                { id: "burger-mexicain", name: "Mexicain", price: 600, description: "100gr steak haché, fromage, poivrons colorés, sauce BBQ piquante." },
+                { id: "burger-mixte", name: "Mixte", price: 700, description: "Steak haché, poulet pané, double fromage, sauce à l’ail." },
+                { id: "burger-big-city", name: "Big City", price: 800, description: "200gr steak haché, double sauce fromagère." }
+            ]
+        },
+        {
+            category: "tacos-bowls",
+            title: "Compose Selon Tes Goûts (Tacos & Bowls)",
+            note: "Garnis de frites et sauce fromagère. Viandes au choix : Poulet Tikka, Tandoori, Tenders, Boursin, Merguez, Chiche Kebab, Viande Hachée.",
+            items: [
+                { id: "tacos-m", name: "Tacos M (1 viande)", price: 600, description: "Choisis 1 viande + sauces." },
+                { id: "tacos-l", name: "Tacos L (2 viandes)", price: 800, description: "Choisis 2 viandes + sauces." },
+                { id: "tacos-xl", name: "Tacos XL (3 viandes)", price: 1050, description: "Choisis 3 viandes + sauces." },
+                { id: "bowls-m", name: "Bowls M (1 viande)", price: 600, description: "Format bowl, 1 viande + sauces." },
+                { id: "bowls-l", name: "Bowls L (2 viandes)", price: 800, description: "Format bowl, 2 viandes + sauces." },
+                { id: "supp-cordon-bleu", name: "Supplément Cordon Bleu", price: 100, description: "Ajout de cordon bleu." },
+                { id: "supp-steak", name: "Supplément Steak de bœuf", price: 200, description: "Ajout steak de bœuf." },
+                { id: "gratine-m", name: "Gratiné M", price: 200, description: "Fromages : Camembert, Gruyère, Cheddar, Gouda." },
+                { id: "gratine-l", name: "Gratiné L", price: 300, description: "Fromages : Camembert, Gruyère, Cheddar, Gouda." },
+                { id: "gratine-xl", name: "Gratiné XL", price: 400, description: "Fromages : Camembert, Gruyère, Cheddar, Gouda." }
+            ]
+        },
+        {
+            category: "sandwichs",
+            title: "Nos Sandwichs (Pain Maison)",
+            note: "Menu +300 DA : Sandwich + Frites + Boisson",
+            items: [
+                { id: "menu-sandwich", name: "Option Menu Sandwich", price: 300, description: "Ajoute frites + boisson à ton sandwich." }
+            ]
+        },
+        {
+            category: "pizzas",
+            title: "Nos Pizzas",
+            note: "Bordure fromage : Medium +250 DA | Large +500 DA. Base sauce tomate ou base crème fraîche.",
+            items: [
+                { id: "bordure-fromage-m", name: "Bordure fromage Medium", price: 250, description: "Supplément bordure fromage." },
+                { id: "bordure-fromage-l", name: "Bordure fromage Large", price: 500, description: "Supplément bordure fromage." }
+            ]
+        },
+        {
+            category: "salades-pates-grillades",
+            title: "Salades, Pâtes & Grillades",
+            note: "Grillades : 2 accompagnements inclus.",
+            items: [
+                { id: "pates-900", name: "Pâtes", price: 900, description: "Selon recette (entrée de gamme)." },
+                { id: "pates-1700", name: "Pâtes", price: 1700, description: "Selon recette (premium)." },
+                { id: "salade-nature", name: "Salade Nature", price: 400, description: "Fraîcheur simple et légère." },
+                { id: "salade-cesar", name: "Salade César", price: 800, description: "Poulet, croûtons, sauce césar." },
+                { id: "salade-cocktail", name: "Cocktail Saumon/Surimi", price: 1100, description: "Cocktail froid avec saumon et surimi." },
+                { id: "grillade-pilon", name: "Pilon de poulet", price: 1200, description: "Grillade + 2 accompagnements." },
+                { id: "grillade-milanaise", name: "Milanaise", price: 1400, description: "Grillade + 2 accompagnements." },
+                { id: "grillade-entrecote", name: "Entrecôte", price: 1800, description: "Grillade + 2 accompagnements." }
+            ]
+        },
+        {
+            category: "accompagnements-boissons",
+            title: "Accompagnements & Boissons",
+            items: [
+                { id: "frites", name: "Frites", price: 200, description: "Portion classique." },
+                { id: "frites-fromagere", name: "Frites sauce fromagère", price: 300, description: "Frites + sauce fromagère." },
+                { id: "tenders-3", name: "Tenders 3 pcs", price: 350, description: "3 pièces." },
+                { id: "tenders-6", name: "Tenders 6 pcs", price: 600, description: "6 pièces." },
+                { id: "tenders-9", name: "Tenders 9 pcs", price: 900, description: "9 pièces." },
+                { id: "eau", name: "Eau", price: 50, description: "Bouteille." },
+                { id: "canette-100", name: "Canette", price: 100, description: "Selon marque." },
+                { id: "canette-150", name: "Canette", price: 150, description: "Selon marque." },
+                { id: "jus-nature", name: "Jus nature", price: 450, description: "Jus frais." },
+                { id: "milkshake", name: "Milkshake / Smoothie", price: 500, description: "Frais et onctueux." }
+            ]
+        },
+        {
+            category: "desserts-sweets",
+            title: "Desserts & Sweets",
+            note: "Crêpes, pancakes, spécialités, glaces et milkshakes.",
+            items: [
+                { id: "crepes-pancakes-choco", name: "Crêpes ou Pancakes fourrés au chocolat", price: 400, description: "" },
+                { id: "supp-150", name: "Suppléments 150 DA", price: 150, description: "Confiture, Miel, Bueno, Ferrero, Caramel Beurre Salé" },
+                { id: "supp-200", name: "Suppléments 200 DA", price: 200, description: "Banane, Fruits de saison" },
+                { id: "supp-250", name: "Suppléments 250 DA", price: 250, description: "Pistache, Nutella, Speculoos, Boule de glace" },
+
+                { id: "tarte-daim", name: "Tarte au Daim", price: 500, description: "" },
+                { id: "tiramisu-choix", name: "Tiramisu du jour « Au choix »", price: 500, description: "" },
+                { id: "creme-brulee", name: "Crème Brûlée", price: 500, description: "" },
+                { id: "mousse-chocolat", name: "Mousse au chocolat", price: 400, description: "" },
+                { id: "triano-3-chocolats", name: "Triano « Mousse 3 chocolats »", price: 450, description: "" },
+
+                { id: "fondant-choix-avec", name: "Fondant au chocolat « Au choix » (avec boule de glace)", price: 600, description: "Chocolat blanc ou chocolat noir" },
+                { id: "fondant-choix-sans", name: "Fondant au chocolat « Au choix » (sans boule de glace)", price: 400, description: "Chocolat blanc ou chocolat noir" },
+
+                { id: "profiterole-m", name: "Profiterole Taille M (x4 petit)", price: 500, description: "Servi avec une boule de glace au choix" },
+                { id: "profiterole-l", name: "Profiterole Taille L (x6 petit)", price: 700, description: "Servi avec une boule de glace au choix" },
+
+                { id: "gelato-1", name: "Gelato – une boule", price: 300, description: "" },
+                { id: "gelato-2", name: "Gelato – deux boules", price: 550, description: "" },
+                { id: "gelato-3", name: "Gelato – trois boules", price: 750, description: "" },
+
+                { id: "milkshake-fraise-banane-bueno", name: "Milkshake Fraise / Banane / Bueno El Mordjane", price: 500, description: "" },
+                { id: "milkshake-pistache", name: "Milkshake Pistache", price: 600, description: "" },
+                { id: "milkshake-nutella-banane", name: "Milkshake Nutella & Banane", price: 700, description: "" },
+
+                { id: "boissons-eau-50cl", name: "Eau (50 CL)", price: 50, description: "" },
+                { id: "boissons-100", name: "Jus (33 CL) / Eau gazeuse / Canettes (24 CL) / Boisson (33 CL)", price: 100, description: "" },
+                { id: "boissons-150", name: "Canettes (33 CL)", price: 150, description: "" },
+                { id: "diabolo", name: "Diabolo (Menthe ou Grenadine)", price: 300, description: "" },
+                { id: "mojito-citron-menthe", name: "Mojito citron menthe / Jus de fruits de saison", price: 450, description: "" },
+                { id: "virgin-mojito-cocktail-smoothie", name: "Virgin mojito / Cocktail de fruits / Smoothie de fruits", price: 500, description: "" },
+
+                { id: "the-infusion", name: "Thé infusion", price: 150, description: "" },
+                { id: "cafe-nespresso", name: "Café Nespresso", price: 250, description: "" },
+                { id: "cappuccino", name: "Cappuccino", price: 350, description: "" }
+            ]
+        }
+    ];
+
+    const quantities = {};
+    const searchInput = document.getElementById('menu-search');
+
+    function getQuantity(id) {
+        return quantities[id] || 0;
+    }
+
+    function setQuantity(id, value) {
+        quantities[id] = Math.max(0, value);
+    }
+
+    function renderMenu(searchTerm = '') {
+        const categoriesContainer = document.getElementById('menu-categories');
+        const menuContainer = document.getElementById('menu-container');
+
+        if (!categoriesContainer || !menuContainer) return;
+
+        let categoriesHTML = '';
+        let menuHTML = '';
+
+        const normalizedSearch = searchTerm.trim().toLowerCase();
+        const filteredCategories = menuData
+            .map((cat) => {
+                if (!normalizedSearch) return cat;
+                const categoryMatch = cat.title.toLowerCase().includes(normalizedSearch);
+                const items = cat.items.filter((item) => {
+                    const haystack = `${item.name} ${item.description}`.toLowerCase();
+                    return categoryMatch || haystack.includes(normalizedSearch);
+                });
+                return { ...cat, items };
+            })
+            .filter((cat) => cat.items.length > 0 || normalizedSearch === '');
+
+        filteredCategories.forEach((cat, index) => {
+            // Render category links
+            categoriesHTML += `<a href="#${cat.category}" class="${index === 0 ? 'active' : ''}">${cat.title}</a>`;
+
+            // Render sections
+            menuHTML += `
+                <section id="${cat.category}" class="reveal">
+                    <div class="section-header">
+                        <h2>${cat.title}</h2>
+                        ${cat.note ? `<p style="color: var(--light-gray); margin-top: 15px;">${cat.note}</p>` : ''}
+                    </div>
+                    <div class="menu-grid">
+                        ${cat.items.map(item => `
+                            <div class="menu-card reveal">
+                                <div class="card-content">
+                                    <p class="card-title">${item.name}</p>
+                                    <p class="card-desc">${item.description}</p>
+                                    <div class="card-footer">
+                                        <p class="card-price">${item.price} DZD</p>
+                                        <div class="qty-control">
+                                            <button class="qty-btn" data-action="minus" data-id="${item.id}" aria-label="Retirer">−</button>
+                                            <span class="qty-value" data-qty="${item.id}">${getQuantity(item.id)}</span>
+                                            <button class="qty-btn" data-action="plus" data-id="${item.id}" aria-label="Ajouter">+</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        `).join('')}
+                    </div>
+                </section>
+            `;
+        });
+
+        categoriesContainer.innerHTML = categoriesHTML;
+        menuContainer.innerHTML = menuHTML;
+
+        // Re-observe new elements for reveal animation
+        const revealObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('active');
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.reveal').forEach(el => {
+            revealObserver.observe(el);
+        });
+    }
+
+    // --- CART SYSTEM ---
+    const cartToggle = document.getElementById('cart-toggle');
+    const cartSidebar = document.getElementById('cart-sidebar');
+    const closeCart = document.getElementById('close-cart');
+    const cartItemsContainer = document.getElementById('cart-items-container');
+    const cartCount = document.getElementById('cart-count');
+    const cartTotal = document.getElementById('cart-total');
+
+    function updateCartUI() {
+        const selectedItems = [];
+        menuData.forEach((cat) => {
+            cat.items.forEach((item) => {
+                const qty = getQuantity(item.id);
+                if (qty > 0) {
+                    selectedItems.push({ ...item, qty });
+                }
+            });
+        });
+
+        if (selectedItems.length === 0) {
+            cartItemsContainer.innerHTML = '<p style="color: var(--gray-text); text-align: center; margin-top: 40px;">Votre panier est vide.</p>';
+        } else {
+            cartItemsContainer.innerHTML = selectedItems.map((item, index) => `
+                <div class="cart-item">
+                    <div class="cart-item-info">
+                        <h4>${item.name} × ${item.qty}</h4>
+                        <p>${item.price} DZD</p>
+                    </div>
+                    <div class="cart-item-remove" data-remove="${item.id}">Retirer</div>
+                </div>
+            `).join('');
+        }
+
+        const total = selectedItems.reduce((sum, item) => sum + (item.price * item.qty), 0);
+        const count = selectedItems.reduce((sum, item) => sum + item.qty, 0);
+        cartTotal.textContent = `${total} DZD`;
+        cartCount.textContent = count;
+    }
+
+    cartToggle.addEventListener('click', () => cartSidebar.classList.add('active'));
+    closeCart.addEventListener('click', () => cartSidebar.classList.remove('active'));
+
+    document.addEventListener('click', (e) => {
+        if (e.target.classList.contains('qty-btn')) {
+            const id = e.target.getAttribute('data-id');
+            const action = e.target.getAttribute('data-action');
+            const current = getQuantity(id);
+            const next = action === 'plus' ? current + 1 : current - 1;
+            setQuantity(id, next);
+            const qtyEl = document.querySelector(`[data-qty="${id}"]`);
+            if (qtyEl) qtyEl.textContent = getQuantity(id);
+            updateCartUI();
+        }
+
+        if (e.target.classList.contains('cart-item-remove')) {
+            const id = e.target.getAttribute('data-remove');
+            setQuantity(id, 0);
+            const qtyEl = document.querySelector(`[data-qty="${id}"]`);
+            if (qtyEl) qtyEl.textContent = getQuantity(id);
+            updateCartUI();
+        }
+    });
+
+    // Call renderMenu on load
+    renderMenu();
+    updateCartUI();
+    initSmoothScroll();
+
+    if (searchInput) {
+        searchInput.addEventListener('input', (e) => {
+            renderMenu(e.target.value);
+        });
+    }
+
+    // Active Nav Link on Scroll (updated to handle dynamic categories)
+    window.addEventListener('scroll', () => {
+        let current = '';
+        const sections = document.querySelectorAll('section');
+        const mainNavLinks = document.querySelectorAll('#main-nav a');
+        const categoryLinks = document.querySelectorAll('#menu-categories a');
+        
+        sections.forEach(section => {
+            const sectionTop = section.offsetTop;
+            const sectionHeight = section.clientHeight;
+            if (window.pageYOffset >= (sectionTop - 200)) {
+                current = section.getAttribute('id');
+            }
+        });
+
+        mainNavLinks.forEach(link => {
+            link.classList.remove('active');
+            if (link.getAttribute('href') === `#${current}`) {
+                link.classList.add('active');
+            }
+        });
+
+        categoryLinks.forEach(link => {
+            link.classList.remove('active');
+            if (link.getAttribute('href') === `#${current}`) {
+                link.classList.add('active');
+            }
+        });
+    });
+
+</script>
+</body>
+</html>
